@@ -1,0 +1,35 @@
+---
+import '@fontsource-variable/plus-jakarta-sans';
+import '@fontsource/jetbrains-mono/400.css';
+import '../styles/global.css';
+
+const title = 'SIMA por Aduanet — Captura y gestión de pedimentos aduanales';
+const description =
+  'SIMA es el sistema web de Aduanet para capturar y gestionar pedimentos aduanales: datos reutilizables y validaciones que evitan rechazos.';
+---
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#f3f5fa" />
+    <script is:inline>
+      // Marca que hay JS (el hero espera su animación de entrada). Respaldo por si el script tarda.
+      document.documentElement.classList.add('js');
+      setTimeout(function () { document.documentElement.classList.remove('js'); }, 4000);
+    </script>
+  </head>
+  <body>
+    <!-- data-markers="off" oculta los marcadores [por confirmar] para previsualizar el estado final -->
+    <div id="root" class="root" data-theme="light" data-markers="on">
+      <a class="skip" href="#inicio">Saltar al contenido</a>
+      <slot />
+    </div>
+    <script src="../scripts/main.js"></script>
+  </body>
+</html>

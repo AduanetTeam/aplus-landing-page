@@ -1,0 +1,352 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+<Layout>
+<a class="skip" href="#inicio">Saltar al contenido</a>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<header class="header" data-header>
+  <nav class="nav" aria-label="Principal">
+    <a class="logo" href="#inicio" aria-label="SIMA inicio"><b>SIMA</b><span>por Aduanet</span></a>
+    <div class="nav-links">
+      <a href="#modulos">Módulos</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#beneficios">Beneficios</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <div class="nav-actions">
+      <button type="button" class="icon-btn" data-theme-toggle aria-label="Cambiar a modo oscuro" title="Cambiar a modo oscuro">
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" style="fill:currentColor;stroke:none"/></svg>
+      </button>
+      <a class="btn nav-cta" href="#contacto">Solicitar demo</a>
+      <button type="button" class="icon-btn menu-btn" data-menu-toggle aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16"/><path d="M4 16h16"/></svg>
+      </button>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-menu-in">
+    <a href="#modulos">Módulos</a>
+    <a href="#como-funciona">Cómo funciona</a>
+    <a href="#beneficios">Beneficios</a>
+    <a href="#faq">FAQ</a>
+    <a href="#contacto">Contacto</a>
+    <a class="btn" href="#contacto">Solicitar demo</a>
+  </div>
+  </div>
+</header>
+
+<main id="inicio">
+
+  <!-- 2. Hero -->
+  <section class="hero" aria-labelledby="hero-t">
+    <h1 id="hero-t" data-hero-text>Del documento al pedimento, sin retrabajo</h1>
+    <p class="hero-sub" data-hero-text>Captura el pedimento completo en un solo lugar, con datos reutilizables y validaciones que evitan rechazos.</p>
+    <div class="hero-ctas" data-hero-text>
+      <a class="btn btn-lg" href="#contacto">Solicitar demo</a>
+      <a class="btn-ghost" href="#como-funciona"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>Ver cómo funciona</a>
+    </div>
+
+    <div class="walk" data-walk>
+    <div class="mock" data-hero-mock role="img" aria-label="Pantalla de captura de pedimento en SIMA, con datos generales, transporte, valores, incrementables y peso y bultos">
+      <div class="mock-top">
+        <span><span class="mock-sq"></span><span>Patente <b>9999</b></span><span>Aduana <b>240</b></span><span class="mock-hide">Oficina <b>Oficina Laredo</b></span></span>
+        <span><span class="mock-bot" aria-hidden="true"><i class="bot-n">1</i><span class="bot-label">Generación de archivo M…</span><svg class="bot-check" width="12" height="12" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="bot-face"><span class="eyes eyes-run"><i></i><i></i></span><span class="eyes eyes-happy"><i></i><i></i></span></span></span><span class="mock-hide" style="padding:5px 10px;border:1px solid var(--line);border-radius:8px;color:var(--ink)">Manuales ▾</span><span class="mock-user"><span class="mock-av">U</span>Usuario</span></span>
+      </div>
+      <div class="mock-body">
+        <div class="mock-rail">
+          <span class="av">U</span><i></i><i></i><i></i><span class="on"><i></i></span><i></i><i></i>
+        </div>
+        <div class="mock-main">
+          <div class="mock-head">
+            <div>
+              <div class="back">← Volver</div>
+              <div class="title">Editar pedimento<span class="mock-status" aria-hidden="true"><span class="st-draft">Borrador</span><span class="st-ok">Validado</span></span></div>
+              <div class="crumb">Módulos › Pedimentos › <span>Pedimento 6000002</span></div>
+            </div>
+            <div class="mock-actions"><span>Cálculos</span><span class="go">Generar archivo M</span><span>Imprimir pedimento</span></div>
+          </div>
+          <div class="mock-fields">
+            <div><div class="lbl">Cliente</div><div class="fld">ADN001 - Aduanet</div></div>
+            <div><div class="lbl">Referencia *</div><div class="fld">T000001</div></div>
+            <div><div class="lbl">Pedimento *</div><div class="fld">6000002</div></div>
+            <div><div class="lbl">Tipo operación *</div><div class="fld">Importación</div></div>
+            <div><div class="lbl">Clave documento *</div><div class="fld">A1 - IMPORTACIÓN</div></div>
+            <div><div class="lbl">Tipo régimen *</div><div class="fld">IMD - DEFINITIVO</div></div>
+          </div>
+          <div class="mock-cols">
+            <div class="mock-side">
+              <span>Colapsar</span><span class="box">Buscar módulo</span>
+              <span>Tráfico</span><span class="act">Datos Generales</span>
+              <span>Observaciones e …</span><span>Facturas</span><span>Partidas</span><span>Contribuciones</span><span>Compensaciones</span>
+            </div>
+            <div class="mock-stack">
+              <div class="mock-card"><div class="ct">Transporte</div>
+                <div class="mock-grid2">
+                  <div><div class="lbl s">Destino *</div><div class="fld s">9 - INTERIOR DEL PAÍS</div></div>
+                  <div><div class="lbl s">Transp. salida</div><div class="fld s">7 - CARRETERO</div></div>
+                  <div><div class="lbl s">Transp. arribo</div><div class="fld s">7 - CARRETERO</div></div>
+                  <div><div class="lbl s">Transp. entrada</div><div class="fld s">7 - CARRETERO</div></div>
+                </div>
+              </div>
+              <div class="mock-card"><div class="ct">Valores (ME)</div>
+                <div class="mock-grid2">
+                  <div><div class="lbl s">P. total (ME) *</div><div class="fld s" data-walk-err>0</div></div>
+                  <div><div class="lbl s">Factor ME</div><div class="fld s">1</div></div>
+                  <div><div class="lbl s">T. cambio</div><div class="fld s">19.3668</div></div>
+                  <div><div class="lbl s">Total USD</div><div class="fld s ro" data-walk-calc>0</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="mock-stack mock-third">
+              <div class="mock-card"><div class="ct">Incrementables</div>
+                <div class="mock-grid3">
+                  <div><div class="lbl s">Val. seguros</div><div class="fld s dim">0.00</div></div>
+                  <div><div class="lbl s">Seguros</div><div class="fld s dim">0.00</div></div>
+                  <div><div class="lbl s">Fletes</div><div class="fld s dim">0.00</div></div>
+                </div>
+              </div>
+              <div class="mock-card"><div class="ct">Peso y bultos</div>
+                <div class="mock-grid3">
+                  <div><div class="lbl s">Peso bruto (kg) *</div><div class="fld s">100</div></div>
+                  <div><div class="lbl s">No. vehículos</div><div class="fld s">0</div></div>
+                  <div><div class="lbl s">Factor ajuste</div><div class="fld s ro">1</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mock-panel" aria-hidden="true">
+        <div class="mp-head"><span>Procesos en segundo plano</span><b>Limpiar</b></div>
+        <div class="mp-item"><i>✓</i><div><b>Generación de archivo M · Pedimento 6000002</b><span>Terminado · clic para ver</span></div></div>
+      </div>
+      <div class="mock-toasts" aria-hidden="true">
+        <div class="mock-toast err"><i>!</i><div><b>Falta un dato obligatorio</b><span>P. total (ME) no puede ser 0.</span></div></div>
+      </div>
+    </div>
+    <ol class="walk-steps" data-walk-steps>
+      <li data-walk-step><span class="n">01</span><b>Captura</b><span class="d">Datos reutilizables: capturas solo lo necesario.</span></li>
+      <li data-walk-step><span class="n">02</span><b>Valida</b><span class="d">Las alertas avisan lo que falta mientras capturas.</span></li>
+      <li data-walk-step><span class="n">03</span><b>Listo</b><span class="d">Estatus validado y archivo M a un clic.</span></li>
+    </ol>
+    <div class="walk-bar" aria-hidden="true"><i data-walk-fill></i></div>
+    </div>
+  </section>
+
+  <!-- 3. Flujo en 4 pasos -->
+  <section id="como-funciona" class="sec-pad" aria-labelledby="flujo-t">
+    <div class="flow-head" data-reveal>
+      <div><h2 class="sec" id="flujo-t">Un flujo, de la entrada<br>al pedimento</h2></div>
+    </div>
+    <div class="timeline-wrap">
+      <div class="timeline-fill" data-fill aria-hidden="true"></div>
+      <ol class="timeline" data-timeline>
+        <li><span class="dot"></span><div class="n">01</div><h3>Entrada de mercancía</h3><p>Registra la entrada o el embarque con bodega, transportista y guías.</p></li>
+        <li><span class="dot"></span><div class="n">02</div><h3>Documento equivalente</h3><p>Captura la factura y genera el COVE con proveedor y destinatario del catálogo.</p></li>
+        <li><span class="dot"></span><div class="n">03</div><h3>Clasificación arancelaria</h3><p>Asigna fracción, permisos e identificadores a cada número de parte.</p></li>
+        <li><span class="dot"></span><div class="n">04</div><h3>Pedimento</h3><p>Revisa partidas y contribuciones, valida y deja el pedimento listo.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 4. Módulos: banda de texto con scroll fijo -->
+  <section id="modulos" class="mods" aria-label="Módulos del sistema">
+    <div class="spin" data-spin>
+      <div class="spin-sticky">
+        <div class="sband" data-sband>
+          <div class="srow" data-srow="1">
+            <span class="it" data-sitem>Entradas y embarques</span><span class="sep" aria-hidden="true"></span>
+            <span class="it" data-sitem>COVE</span><span class="sep" aria-hidden="true"></span>
+            <span class="it" data-sitem>Contribuciones</span>
+          </div>
+          <div class="srow" data-srow="-1">
+            <span class="it" data-sitem>Clasificación</span><span class="sep" aria-hidden="true"></span>
+            <span class="it" data-sitem>Catálogos</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Aprende mientras trabajas -->
+  <section class="sec-pad" aria-labelledby="aprende-t">
+    <div class="learn">
+      <div data-apcol>
+        <h2 class="sec" id="aprende-t" data-ap="0">Aprende mientras trabajas</h2>
+        <p class="lead" data-ap="1">Recorridos guiados dentro de la aplicación muestran, paso a paso, dónde capturar cada dato. Los manuales de usuario están a un clic desde cualquier pantalla.</p>
+        <ul>
+          <li data-ap="2"><span class="k">A</span><div><b>Tutoriales interactivos</b><span class="d">Globos de ayuda sobre la pantalla real, no un video aparte.</span></div></li>
+          <li data-ap="3"><span class="k">B</span><div><b>Manuales de usuario integrados</b><span class="d">Consulta el manual de cada módulo sin salir del sistema.</span></div></li>
+        </ul>
+      </div>
+
+      <div class="tour" data-reveal role="img" aria-label="Recorrido guiado: un globo de ayuda señala el botón Nuevo pedimento en el listado de pedimentos">
+        <div class="tour-win">
+          <div class="tour-bar">
+            <b>Pedimentos</b>
+            <span class="tour-new">
+              <span class="pill">+ Nuevo pedimento</span>
+              <span class="balloon" data-balloon>
+                <span class="tip"></span>
+                <span class="step" data-tour-step>Paso 2 de 5</span>
+                <span class="bt" data-tour-title>Crea tu primer pedimento</span>
+                <span class="bd" data-tour-body>Elige el tipo de operación y la clave. Los datos del cliente se llenan desde el catálogo.</span>
+                <span class="brow">
+                  <span class="segs" data-tour-segs><i></i><i class="on"></i><i></i><i></i><i></i></span>
+                  <span class="bbtns"><button type="button" data-tour-prev>Anterior</button><button type="button" class="pri" data-tour-next>Siguiente</button></span>
+                </span>
+              </span>
+            </span>
+          </div>
+          <div class="tour-filters"><span>Buscar pedimento…</span><span>Aduana ▾</span><span>Estatus ▾</span></div>
+          <div class="tour-table">
+            <div class="r h"><span>Pedimento</span><span>Cliente</span><span>Clave</span><span>Estatus</span></div>
+            <div class="r"><span class="mono">26 47 3XXX …01</span><span>Cliente A</span><span>A1</span><span>Borrador</span></div>
+            <div class="r"><span class="mono">26 47 3XXX …02</span><span>Cliente B</span><span>V1</span><span>Validado</span></div>
+            <div class="r"><span class="mono">26 47 3XXX …03</span><span>Cliente C</span><span>A1</span><span>Validado</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Beneficios -->
+  <section id="beneficios" class="ben" aria-labelledby="ben-t">
+    <h2 id="ben-t"><span class="b" data-bnh>Menos captura,</span><span class="i" data-bnh>menos errores,&nbsp;</span><span class="i v" data-bnh>más control</span></h2>
+    <div class="ben-grid" data-bng>
+      <div class="card card-blue" data-bnc>
+        <div class="eyebrow">Captura repetida</div>
+        <div class="big">3–6 min</div>
+        <p>menos por pedimento al reutilizar catálogos de clientes, proveedores y números de parte.</p>
+        <div class="chart">
+          <div class="cap">Tiempo de captura en pedimentos sucesivos</div>
+          <svg aria-hidden="true" viewBox="0 0 260 100" preserveAspectRatio="none">
+            <rect data-bar x="4" y="0" width="32" height="100" rx="6" fill="#fff" fill-opacity="0.30"/>
+            <rect data-bar x="48" y="14" width="32" height="86" rx="6" fill="#fff" fill-opacity="0.44"/>
+            <rect data-bar x="92" y="28" width="32" height="72" rx="6" fill="#fff" fill-opacity="0.58"/>
+            <rect data-bar x="136" y="40" width="32" height="60" rx="6" fill="#fff" fill-opacity="0.72"/>
+            <rect data-bar x="180" y="50" width="32" height="50" rx="6" fill="#fff" fill-opacity="0.86"/>
+            <rect data-bar x="224" y="58" width="32" height="42" rx="6" fill="#fff" fill-opacity="1"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card card-surface" data-bnc>
+        <div class="head"><div class="eyebrow">Errores de captura</div><div class="big">20–40%</div></div>
+        <ul>
+          <li><span>01</span>Campos obligatorios sin llenar</li>
+          <li><span>02</span>Datos que no coinciden con el catálogo</li>
+          <li><span>03</span>Valores fuera de formato</li>
+        </ul>
+        <p>menos correcciones, porque las validaciones avisan lo que falta mientras capturas y no después de un rechazo.</p>
+      </div>
+      <div class="ben-col" data-bnc>
+        <div class="card card-lav">
+          <div class="head"><div class="eyebrow">Trazabilidad</div><div class="big">1 expediente</div></div>
+          <p>con entrada, factura, clasificación y documentos ligados.</p>
+        </div>
+        <div class="card card-deep">
+          <div class="head"><div class="eyebrow">Curva de aprendizaje</div><div class="big">2–8 días</div></div>
+          <p>menos para que un capturista nuevo trabaje solo.</p>
+        </div>
+      </div>
+    </div>
+    <p class="legend" data-reveal>Estimación interna, sujeta a validación.</p>
+  </section>
+
+  <!-- 7. Seguridad y control: sin contenido del cliente; no implementar hasta recibirlo -->
+
+  <!-- 8. Preguntas frecuentes -->
+  <section id="faq" class="faq" aria-labelledby="faq-t">
+    <div data-faq-head>
+      <h2 class="sec" id="faq-t">Preguntas frecuentes</h2>
+      <p class="more">¿Tienes otra duda? <a href="#contacto">Escríbenos</a>.</p>
+    </div>
+    <div class="faq-list" data-faq-list>
+      <details data-faq-item>
+        <summary>¿Necesito instalar algo?<i aria-hidden="true">+</i></summary>
+        <p>No. SIMA es un sistema web: se usa desde el navegador con usuario y contraseña.</p>
+      </details>
+      <details data-faq-item>
+        <summary>¿Se puede importar mi información?<i aria-hidden="true">+</i></summary>
+        <p>Podemos cargar tus catálogos actuales, como clientes, proveedores, números de parte y más.</p>
+      </details>
+      <details data-faq-item>
+        <summary>¿Cómo capacitan a mi equipo?<i aria-hidden="true">+</i></summary>
+        <p>El sistema incluye recorridos guiados y manuales de usuario por módulo. Además, el área de atención a clientes atiende tus dudas sobre el sistema.</p>
+      </details>
+      <details data-faq-item>
+        <summary>¿Qué soporte incluye?<i aria-hidden="true">+</i></summary>
+        <p>El soporte se hace mediante el <a href="https://soporte.aduanet.net/" target="_blank" rel="noopener">sistema de tickets de Aduanet</a>, de 9:00 a. m. a 7:00 p. m. El tiempo de respuesta es rápido.</p>
+      </details>
+      <details data-faq-item>
+        <summary>¿Puedo dar acceso a varias oficinas?<i aria-hidden="true">+</i></summary>
+        <p>Sí. En Administración das de alta oficinas, usuarios y roles con permisos distintos.</p>
+      </details>
+      <details data-faq-item>
+        <summary>¿Cómo se contrata?<i aria-hidden="true">+</i></summary>
+        <p>Solicita una demo y te presentamos el sistema con tus propios casos. También puedes contactar a ventas desde la <a href="https://www.aduanet.net/" target="_blank" rel="noopener">página de Aduanet</a> o escribir a <a href="mailto:ventas@aduanet.net">ventas@aduanet.net</a>.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- 9. Solicitar demo -->
+  <section id="contacto" class="contact" aria-labelledby="cta-t">
+    <div class="contact-in" data-reveal>
+      <div>
+        <h2 class="sec" id="cta-t" style="margin:0">Solicita una demo</h2>
+        <p class="lead">Te mostramos cómo capturar un pedimento completo en SIMA con la operación de tu empresa.</p>
+        <dl>
+          <div><dt>Correo</dt><dd><a href="mailto:ventas@aduanet.net">ventas@aduanet.net</a></dd></div>
+        </dl>
+      </div>
+      <form class="form" id="demo-form">
+        <div class="row">
+          <label>Nombre<input required name="nombre" autocomplete="name" placeholder="Tu nombre completo"></label>
+          <label>Empresa<input required name="empresa" autocomplete="organization" placeholder="Agencia o empresa"></label>
+        </div>
+        <label>Correo<input required type="email" name="correo" autocomplete="email" placeholder="nombre@empresa.com"></label>
+        <label>Mensaje<textarea name="mensaje" rows="4" placeholder="Cuéntanos sobre tu operación: tipo de operaciones, pedimentos al mes, aduanas…"></textarea></label>
+        <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <p class="form-error" role="alert" data-form-error hidden></p>
+        <button class="btn" type="submit">Solicitar demo</button>
+        <p class="priv">Al enviar aceptas el <a href="#">aviso de privacidad</a>.</p>
+      </form>
+      <div class="sent" id="demo-sent" role="status" tabindex="-1" hidden>
+        <div>Gracias, recibimos tu solicitud.</div>
+        <p>Te contactaremos para agendar la demo.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- 10. Footer -->
+<footer class="footer">
+  <div class="footer-in">
+    <div class="footer-brand">
+      <a class="footer-logo" href="#inicio" aria-label="SIMA inicio"><b>SIMA</b><span>por Aduanet</span></a>
+      <p class="tag">Captura y gestión de pedimentos aduanales, por Aduanet.</p>
+    </div>
+    <nav class="col" aria-label="Útil">
+      <div class="fh">Útil</div>
+      <a href="#modulos">Módulos</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#beneficios">Beneficios</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="col">
+      <div class="fh">Legal</div>
+      <a href="#">Aviso de privacidad</a>
+    </div>
+    <div class="col">
+      <div class="fh">Contacto</div>
+      <a href="#contacto">Solicitar demo</a>
+      <a href="mailto:ventas@aduanet.net">ventas@aduanet.net</a>
+    </div>
+  </div>
+  <div class="footer-bar"><span>© 2026 Aduanet</span></div>
+</footer>
+
+</Layout>

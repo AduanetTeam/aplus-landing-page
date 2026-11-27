@@ -1,0 +1,31 @@
+# Dependencias
+node_modules/
+
+# Build y caché de Astro
+dist/
+.astro/
+
+# Variables de entorno (usa .env.example como plantilla)
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Editores
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Caché y ajustes locales de herramientas (contienen rutas de tu equipo)
+.impeccable/hook.cache.json
+.claude/settings.local.json

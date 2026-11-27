@@ -181,7 +181,22 @@ h2.sec { margin: 8px 0 0; font-weight: 400; font-size: clamp(32px, 4.6vw, 52px);
 .mp-item div { min-width: 0; }
 .mp-item b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11.5px; font-weight: 600; color: var(--ink); }
 .mp-item span { display: block; margin-top: 2px; font-size: 10.5px; color: var(--muted); }
-@media (max-width: 599px) { .mock-bot .bot-label { display: none; } }
+.mock-bot .bot-label { text-overflow: ellipsis; }
+/* Móvil: el mockup se recorta a una ventana con difuminado abajo; su contenido se desplaza solo (ver main.js) */
+@media (max-width: 759px) {
+  .mock-actions { display: flex; margin-top: 2px; }
+  .mock-actions span:not(.go) { display: none; }
+  .mock-body { -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 44px), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - 44px), transparent); }
+}
+/* Móvil angosto: la barra superior debe caber completa (el bot y su etiqueta no se recortan) */
+@media (max-width: 599px) {
+  .mock-top { padding: 9px 12px; gap: 8px; }
+  .mock-top > span { gap: 10px; }
+  .mock-sq, .mock-top > span:first-child > span:nth-child(3) { display: none; }
+  .mock-user { font-size: 0; padding: 3px; }
+  .mock-user .mock-av { font-size: 10px; }
+  .mock-bot { min-width: 0; }
+}
 .walk-steps { list-style: none; margin: 18px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; text-align: left; }
 .walk-steps .n { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--violet); }
 .walk-steps b { display: block; margin-top: 2px; font-size: 15px; font-weight: 600; color: var(--ink); }

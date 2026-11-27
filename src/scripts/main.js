@@ -164,7 +164,7 @@ const faqItems = $$('[data-faq-item]');
       const eyesRun = mock.querySelector('.eyes-run');
       const eyesHappy = mock.querySelector('.eyes-happy');
       const panel = mock.querySelector('.mock-panel');
-      const labelW = botLabel ? botLabel.scrollWidth : 0;
+      const labelW = botLabel ? Math.min(botLabel.scrollWidth, window.innerWidth < 600 ? 112 : 400) : 0;
       const stDraft = mock.querySelector('.st-draft');
       const stOk = mock.querySelector('.st-ok');
       const stepEls = $$('[data-walk-step]');
@@ -187,6 +187,16 @@ const faqItems = $$('[data-faq-item]');
         }, at);
       };
 
+      // Móvil: el mockup es una ventana más baja que su contenido; el contenido baja solo hasta el campo que se valida
+      const mainEl = mock.querySelector('.mock-main');
+      const bodyEl = mock.querySelector('.mock-body');
+      let dy = 0;
+      if (matchMedia('(max-width: 759px)').matches && mainEl && bodyEl && pTotal) {
+        dy = pTotal.offsetTop - bodyEl.offsetTop - 78; // deja visible la etiqueta del campo
+        // .mock-main se estira hasta la altura de la ventana: el alto real del contenido es scrollHeight
+        dy = Math.max(0, Math.min(dy, mainEl.scrollHeight - bodyEl.clientHeight));
+      }
+
       // 1. Captura
       typed.forEach((el, i) => type(el, el.textContent.trim(), i * 0.16, 0.22, blank, true));
       // 2. Valida: error, corrección y cálculo automático
@@ -196,34 +206,39 @@ const faqItems = $$('[data-faq-item]');
       type(pTotal, '1,250.00', 3.65, 0.4, '0', false);
       if (toastErr) tl.to(toastErr, { opacity: 0, y: -14, duration: 0.25, ease: 'power2.in' }, 3.85);
       type(totalUsd, '1,250.00', 4.1, 0.3, '0', true);
+      // Móvil: sube de nuevo al encabezado (estatus y botón) antes del clic
+      if (dy > 0) {
+        tl.fromTo(mainEl, { y: 0 }, { y: -dy, duration: 1.4, ease: 'power1.inOut' }, 1.0);
+        tl.to(mainEl, { y: 0, duration: 0.35, ease: 'power2.inOut' }, 4.1);
+      }
       // 3. Listo: clic en Generar archivo M. El pedimento solo queda "Validado" cuando el bot termina.
       if (go) {
-        tl.fromTo(go, { '--glow': 0 }, { '--glow': 1, duration: 0.25 }, 4.3);
-        tl.to(go, { scale: 0.93, duration: 0.08 }, 4.6).to(go, { scale: 1, duration: 0.12 }, 4.68);
+        tl.fromTo(go, { '--glow': 0 }, { '--glow': 1, duration: 0.25 }, 4.5);
+        tl.to(go, { scale: 0.93, duration: 0.08 }, 4.8).to(go, { scale: 1, duration: 0.12 }, 4.88);
       }
       if (bot) {
         // En proceso: etiqueta + contador + ojos redondos que miran de lado a lado
-        tl.fromTo(bot, { opacity: 0, scale: 0.7, transformOrigin: '100% 50%' }, { opacity: 1, scale: 1, duration: 0.25, ease: 'back.out(1.7)' }, 4.75);
-        if (eyesRun) tl.fromTo(eyesRun, { x: -1.2 }, { x: 1.2, duration: 0.3, repeat: 1, yoyo: true, ease: 'sine.inOut' }, 4.95);
+        tl.fromTo(bot, { opacity: 0, scale: 0.7, transformOrigin: '100% 50%' }, { opacity: 1, scale: 1, duration: 0.25, ease: 'back.out(1.7)' }, 4.95);
+        if (eyesRun) tl.fromTo(eyesRun, { x: -1.2 }, { x: 1.2, duration: 0.3, repeat: 1, yoyo: true, ease: 'sine.inOut' }, 5.15);
         // Terminado: la etiqueta se pliega, aparece la palomita y los ojos sonríen
-        if (botLabel) tl.fromTo(botLabel, { maxWidth: labelW, opacity: 1 }, { maxWidth: 0, opacity: 0, duration: 0.25 }, 5.45);
-        if (botN) tl.fromTo(botN, { maxWidth: 14, opacity: 1 }, { maxWidth: 0, opacity: 0, duration: 0.25 }, 5.45);
-        if (botCheck) tl.fromTo(botCheck, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.25 }, 5.45);
-        if (eyesRun) tl.fromTo(eyesRun, { opacity: 1 }, { opacity: 0, duration: 0.2 }, 5.45);
-        if (eyesHappy) tl.fromTo(eyesHappy, { opacity: 0 }, { opacity: 1, duration: 0.2 }, 5.45);
+        if (botLabel) tl.fromTo(botLabel, { maxWidth: labelW, opacity: 1 }, { maxWidth: 0, opacity: 0, duration: 0.25 }, 5.65);
+        if (botN) tl.fromTo(botN, { maxWidth: 14, opacity: 1 }, { maxWidth: 0, opacity: 0, duration: 0.25 }, 5.65);
+        if (botCheck) tl.fromTo(botCheck, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.25 }, 5.65);
+        if (eyesRun) tl.fromTo(eyesRun, { opacity: 1 }, { opacity: 0, duration: 0.2 }, 5.65);
+        if (eyesHappy) tl.fromTo(eyesHappy, { opacity: 0 }, { opacity: 1, duration: 0.2 }, 5.65);
       }
       // El estatus cambia a Validado en cuanto el bot termina
-      if (stDraft) tl.fromTo(stDraft, { opacity: 1 }, { opacity: 0, duration: 0.25 }, 5.5);
-      if (stOk) tl.fromTo(stOk, { opacity: 0 }, { opacity: 1, duration: 0.25 }, 5.5);
-      if (panel) tl.fromTo(panel, { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }, 5.75);
+      if (stDraft) tl.fromTo(stDraft, { opacity: 1 }, { opacity: 0, duration: 0.25 }, 5.7);
+      if (stOk) tl.fromTo(stOk, { opacity: 0 }, { opacity: 1, duration: 0.25 }, 5.7);
+      if (panel) tl.fromTo(panel, { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }, 5.95);
       // Pasos del pie: el activo se enciende
-      const marks = [0, 2.6, 4.3];
+      const marks = [0, 2.6, 4.5];
       stepEls.forEach((el, i) => {
         if (i > 0) tl.fromTo(el, { opacity: 0.5 }, { opacity: 1, duration: 0.3 }, marks[i]);
         if (i < stepEls.length - 1) tl.to(el, { opacity: 0.5, duration: 0.3 }, marks[i + 1]);
       });
-      if (fillBar) tl.fromTo(fillBar, { scaleX: 0 }, { scaleX: 1, duration: 6.2 }, 0);
-      tl.set({}, {}, 6.2);
+      if (fillBar) tl.fromTo(fillBar, { scaleX: 0 }, { scaleX: 1, duration: 6.4 }, 0);
+      tl.set({}, {}, 6.4);
 
       const off = () => Math.max(header.offsetHeight + 28, Math.round((window.innerHeight - walk.offsetHeight) / 2));
       const pin = ScrollTrigger.create({

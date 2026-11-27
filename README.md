@@ -6,7 +6,7 @@ Sitio estático construido con [Astro](https://astro.build) y animado con [GSAP]
 
 ## Requisitos
 
-- Node.js **22.23.4 o superior** (hay un `.nvmrc`: `nvm use`)
+- Node.js **22.23.4 o superior** (el `.nvmrc` fija Node 24: `nvm use`)
 - npm 9.6.5 o superior
 
 ## Puesta en marcha
@@ -61,13 +61,40 @@ public/                     # Archivos estáticos (favicon, imágenes)
 
 Todo lo animado vive en `src/scripts/main.js`; los tiempos del recorrido del mockup están en el bloque "Recorrido del mockup".
 
-## Despliegue
+## Build y despliegue (GitHub Actions)
 
-La salida es 100 % estática (`output: 'static'`): publica el contenido de `dist/` en cualquier hosting estático.
+El workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) hace lo siguiente:
 
-Antes de publicar:
+| Evento                    | Qué hace                                                        |
+| ------------------------- | --------------------------------------------------------------- |
+| Pull request              | Compila el sitio (`npm ci` + `npm run build`) para validar el PR |
+| Push a `main`             | Compila y, si el despliegue está activado, publica en Pages     |
+| Ejecución manual          | Igual que un push a `main` (pestaña **Actions → Run workflow**) |
 
-- Define `PUBLIC_WEB3FORMS_KEY` en el entorno de build.
-- Define `site` en `astro.config.mjs` con el dominio final (canonical y sitemap).
-- Reemplaza el enlace del aviso de privacidad (hoy apunta a `#`).
-- Agrega un favicon en `public/` (el navegador pide `/favicon.ico`).
+La salida es 100 % estática (`output: 'static'`), así que también sirve en cualquier otro hosting estático publicando `dist/`.
+
+### Activar GitHub Pages
+
+El despliegue está **apagado por defecto** para que el CI no falle mientras Pages no esté disponible.
+
+> GitHub Pages en un repositorio **privado** requiere un plan de pago (Team o Enterprise). En el plan Free solo funciona con repositorios públicos.
+
+1. Habilita Pages: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+2. Crea la variable de repositorio `DEPLOY_PAGES` con valor `true`
+   (**Settings → Secrets and variables → Actions → Variables**).
+3. Crea también la variable `PUBLIC_WEB3FORMS_KEY` con la clave del formulario.
+4. Haz un push a `main` (o ejecuta el workflow a mano). El sitio queda en
+   `https://aduanetteam.github.io/aplus-landing-page/`.
+
+### Dominio propio
+
+Define las variables de repositorio `SITE_URL` (por ejemplo `https://sima.aduanet.net`) y `BASE_PATH` con valor `/`.
+Sin ellas, el workflow usa `https://<organización>.github.io` y `/<repositorio>`.
+
+`astro.config.mjs` lee `SITE_URL` y `BASE_PATH` del entorno; en local no se necesitan y el sitio vive en `/`.
+
+### Pendientes antes de publicar
+
+- Definir `PUBLIC_WEB3FORMS_KEY` en las variables de Actions.
+- Reemplazar el enlace del aviso de privacidad (hoy apunta a `#`).
+- Agregar un favicon en `public/` (el navegador pide `/favicon.ico`).

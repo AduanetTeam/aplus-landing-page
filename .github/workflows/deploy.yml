@@ -1,0 +1,78 @@
+name: Build y despliegue
+
+on:
+  # Cada push a main compila (y despliega si el despliegue está activado).
+  push:
+    branches: [main]
+  # Cada pull request solo compila: si el build falla, se ve en el PR.
+  pull_request:
+  # Permite lanzarlo a mano desde la pestaña Actions.
+  workflow_dispatch:
+
+# Un solo despliegue a la vez por rama; uno nuevo cancela al que sigue en curso.
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Instalar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # GitHub Pages de proyecto vive en https://<organización>.github.io/<repositorio>/.
+      # Para un dominio propio, define las variables SITE_URL (https://tu-dominio.com) y BASE_PATH (/).
+      - name: Calcular URL y ruta base
+        env:
+          SITE_URL_OVERRIDE: ${{ vars.SITE_URL }}
+          BASE_PATH_OVERRIDE: ${{ vars.BASE_PATH }}
+        run: |
+          OWNER="$(echo "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')"
+          REPO="${GITHUB_REPOSITORY#*/}"
+          echo "SITE_URL=${SITE_URL_OVERRIDE:-https://${OWNER}.github.io}" >> "$GITHUB_ENV"
+          echo "BASE_PATH=${BASE_PATH_OVERRIDE:-/${REPO}}" >> "$GITHUB_ENV"
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Compilar
+        run: npm run build
+        env:
+          # Clave pública de Web3Forms. Se define en Settings → Secrets and variables → Actions → Variables.
+          PUBLIC_WEB3FORMS_KEY: ${{ vars.PUBLIC_WEB3FORMS_KEY }}
+
+      - name: Subir el artefacto de Pages
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Desplegar a GitHub Pages
+    # Solo desde main y solo cuando el despliegue está activado.
+    # Se activa creando la variable de repositorio DEPLOY_PAGES = true
+    # (después de habilitar Pages en Settings → Pages → Source: GitHub Actions).
+    if: github.event_name != 'pull_request' && vars.DEPLOY_PAGES == 'true'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Desplegar a GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

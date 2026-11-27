@@ -36,9 +36,9 @@ input, textarea, button { font-family: inherit; }
 
 /* Header */
 .header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: transparent; border-bottom: 1px solid transparent; border-radius: 0; overflow: hidden;
-  transition: background .35s, backdrop-filter .35s, -webkit-backdrop-filter .35s, border-color .35s, box-shadow .35s; }
+  transition: background .35s, backdrop-filter .35s, border-color .35s, box-shadow .35s; }
 /* Al hacer scroll: ancho completo, fondo traslúcido con desenfoque y borde inferior sutil (bordes rectos) */
-.header.is-scrolled { background: var(--nav-glass); backdrop-filter: blur(16px) saturate(1.6); -webkit-backdrop-filter: blur(16px) saturate(1.6);
+.header.is-scrolled { background: var(--nav-glass); backdrop-filter: blur(16px) saturate(1.6);
   border-bottom-color: var(--line); box-shadow: 0 1px 0 rgba(255, 255, 255, .35) inset; }
 .nav { max-width: 1240px; margin: 0 auto; padding: 12px clamp(16px, 4vw, 40px); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .logo { display: flex; align-items: center; gap: 10px; color: var(--ink); }
@@ -53,7 +53,7 @@ input, textarea, button { font-family: inherit; }
 .btn { display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; flex: none; border-radius: 999px; background: var(--btn); color: var(--btn-ink); font-weight: 500; border: 0; cursor: pointer; }
 .btn:hover { color: var(--btn-ink); opacity: .92; }
 .nav-cta { height: 40px; padding: 0 20px; font-size: 13.5px; }
-.mobile-menu { display: grid; grid-template-rows: 0fr; opacity: 0; visibility: hidden; font-size: 16px; background: var(--nav); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+.mobile-menu { display: grid; grid-template-rows: 0fr; opacity: 0; visibility: hidden; font-size: 16px; background: var(--nav); backdrop-filter: blur(18px);
   transition: grid-template-rows .4s cubic-bezier(.2, .7, .2, 1), opacity .3s ease, visibility 0s linear .4s; }
 .mobile-menu.open { grid-template-rows: 1fr; opacity: 1; visibility: visible;
   transition: grid-template-rows .4s cubic-bezier(.2, .7, .2, 1), opacity .3s ease, visibility 0s; }
@@ -562,3 +562,10 @@ html:has([data-theme="dark"]) { background: #131d42; }
 .form-error[hidden] { display: none; }
 [data-theme="dark"] .form-error { color: #fecaca; background: rgba(248, 113, 113, .12); border-color: rgba(248, 113, 113, .35); }
 .form .btn[disabled] { opacity: .65; cursor: progress; }
+
+/* Safari anterior a la versión 18 solo entiende `-webkit-backdrop-filter`. Va dentro de @supports porque el minificador
+   de CSS de producción elimina la versión estándar cuando ambas están en la misma regla (y Chrome/Brave se quedan sin desenfoque). */
+@supports not (backdrop-filter: blur(1px)) {
+  .header.is-scrolled { -webkit-backdrop-filter: blur(16px) saturate(1.6); }
+  .mobile-menu { -webkit-backdrop-filter: blur(18px); }
+}

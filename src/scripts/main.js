@@ -40,6 +40,7 @@ import { SplitText } from 'gsap/SplitText';
   const bar = $('[data-progress]');
   const heroT = $$('[data-hero-text]');
   const mock = $('[data-hero-mock]');
+  const mockM = $('[data-walk-m]');
   const fill = $('[data-fill]');
   const timeline = $('[data-timeline]');
   const steps = $$('[data-timeline] > li');
@@ -112,9 +113,9 @@ const faqItems = $$('[data-faq-item]');
       scrollTrigger: { start: 0, end: () => '+=' + window.innerHeight * range[0], scrub: true, invalidateOnRefresh: true },
     });
   };
-  const heroMockScrub = (range) => {
-    if (!mock) return;
-    gsap.fromTo(mock, { rotateX: 7, scale: 0.96, transformPerspective: 1400 }, {
+  const heroMockScrub = (range, el) => {
+    if (!el) return;
+    gsap.fromTo(el, { rotateX: 7, scale: 0.96, transformPerspective: 1400 }, {
       rotateX: 0, scale: 1, ease: 'none',
       scrollTrigger: { start: 0, end: () => '+=' + window.innerHeight * range[1], scrub: true, invalidateOnRefresh: true },
     });
@@ -124,7 +125,8 @@ const faqItems = $$('[data-faq-item]');
   mm.add({ phone: '(max-width: 759px)', desk: '(min-width: 760px)' }, (ctx) => {
     // En móvil el hero tarda más en desvanecerse: se deja leer y ver el mockup.
     const range = ctx.conditions.phone ? [1.25, 1.25] : [0.6, 0.7];
-    heroMockScrub(range);
+    const visual = (ctx.conditions.phone && mockM) || mock; // pantalla móvil o mockup de escritorio
+    heroMockScrub(range, visual);
     const start = () => heroScrub(range);
     if (heroDone) start();
     else {
@@ -141,118 +143,159 @@ const faqItems = $$('[data-faq-item]');
           { yPercent: 0, opacity: 1, filter: 'blur(0px)', duration: 1, stagger: 0.07, clearProps: 'filter' }, 0.05);
       }
       intro.fromTo(rest, { y: 34, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, stagger: 0.12 }, 0.45);
-      if (mock) intro.fromTo(mock, { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1 }, 0.6);
+      if (visual) intro.fromTo(visual, { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1 }, 0.6);
     }
   });
 
   /* Recorrido del mockup: queda fijo y se llena solo mientras haces scroll.
+     Escritorio: mockup completo de la app. Móvil (≤759px): pantalla pensada para el teléfono, con una escena por paso.
      Se crea antes que los demás triggers para que sus posiciones cuenten el espacio del pin. */
   const walk = $('[data-walk]');
+  const BLANK = ' ';
+
+  // Escribe `full` letra por letra en `el`. `initial` es lo que se ve antes de empezar.
+  const typeInto = (tl, el, full, at, dur, initial, setInitial) => {
+    if (!el) return;
+    if (setInitial) el.textContent = initial;
+    const o = { n: 0 };
+    tl.to(o, {
+      n: full.length, duration: dur,
+      onUpdate: () => {
+        const k = Math.round(o.n);
+        el.textContent = k <= 0 ? initial : full.slice(0, k);
+        el.classList.toggle('is-typing', k > 0 && k < full.length);
+      },
+    }, at);
+  };
+
+  // Final: clic en "Generar archivo M" → aparece el bot de procesos → "Validado" solo cuando el bot termina → panel.
+  // El bot solo existe en pantalla durante la etapa 3.
+  const finale = (root, tl, t0) => {
+    const q = (s) => root.querySelector(s);
+    const go = q('.go, .mm-go'), bot = q('.mock-bot'), botLabel = q('.bot-label'), botN = q('.bot-n');
+    const botCheck = q('.bot-check'), eyesRun = q('.eyes-run'), eyesHappy = q('.eyes-happy'), panel = q('.mock-panel');
+    const stDraft = q('.st-draft'), stOk = q('.st-ok');
+    const labelW = botLabel ? botLabel.scrollWidth : 0;
+    const done = t0 + 1.15;
+    if (go) {
+      tl.fromTo(go, { '--glow': 0 }, { '--glow': 1, duration: 0.25 }, t0);
+      tl.to(go, { scale: 0.93, duration: 0.08 }, t0 + 0.3).to(go, { scale: 1, duration: 0.12 }, t0 + 0.38);
+    }
+    if (bot) {
+      // Aparece ya en proceso: etiqueta + contador + ojos que miran de lado a lado
+      tl.fromTo(bot, { opacity: 0, scale: 0.7, transformOrigin: '50% 50%' }, { opacity: 1, scale: 1, duration: 0.25, ease: 'back.out(1.7)' }, t0 + 0.45);
+      const fold = (el, w) => tl.fromTo(el, { maxWidth: w, marginRight: 6, opacity: 1 }, { maxWidth: 0, marginRight: 0, opacity: 0, duration: 0.25 }, done);
+      if (botLabel) fold(botLabel, labelW);
+      if (botN) fold(botN, 14);
+      if (eyesRun) tl.fromTo(eyesRun, { x: -1.2 }, { x: 1.2, duration: 0.3, repeat: 1, yoyo: true, ease: 'sine.inOut' }, t0 + 0.65);
+      // Terminado: aparece la palomita y los ojos sonríen
+      if (botCheck) tl.fromTo(botCheck, { width: 0, marginRight: 0, opacity: 0, scale: 0.4 }, { width: 12, marginRight: 6, opacity: 1, scale: 1, duration: 0.25 }, done);
+      if (eyesRun) tl.fromTo(eyesRun, { opacity: 1 }, { opacity: 0, duration: 0.2 }, done);
+      if (eyesHappy) tl.fromTo(eyesHappy, { opacity: 0 }, { opacity: 1, duration: 0.2 }, done);
+    }
+    if (stDraft) tl.fromTo(stDraft, { opacity: 1 }, { opacity: 0, duration: 0.25 }, t0 + 1.2);
+    if (stOk) tl.fromTo(stOk, { opacity: 0 }, { opacity: 1, duration: 0.25 }, t0 + 1.2);
+    if (panel) tl.fromTo(panel, { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }, t0 + 1.45);
+  };
+
+  // Pasos del pie. Escritorio: el activo se enciende. Móvil: se muestra un solo paso a la vez (se apilan en la misma celda).
+  const stepsAndFill = (tl, marks, total, stage) => {
+    const list = $('[data-walk-steps]');
+    const stepEls = $$('[data-walk-step]');
+    const fillBar = $('[data-walk-fill]');
+    if (stage && list) list.classList.add('is-stage');
+    const hidden = stage ? { opacity: 0, y: 12 } : { opacity: 0.5 };
+    const shown = stage ? { opacity: 1, y: 0 } : { opacity: 1 };
+    const leaving = stage ? { opacity: 0, y: -12 } : { opacity: 0.5 };
+    // En móvil el paso que sale se va rápido y el siguiente entra un poco después, para que no se encimen
+    stepEls.forEach((el, i) => {
+      if (i > 0) tl.fromTo(el, hidden, { ...shown, duration: 0.3 }, marks[i] + (stage ? 0.15 : 0));
+      if (i < stepEls.length - 1) tl.to(el, { ...leaving, duration: stage ? 0.2 : 0.3 }, marks[i + 1]);
+    });
+    if (fillBar) tl.fromTo(fillBar, { scaleX: 0 }, { scaleX: 1, duration: total }, 0);
+    tl.set({}, {}, total);
+  };
+
+  // Fija el bloque centrado en la pantalla y ata la línea de tiempo al scroll.
+  const bindWalk = (tl) => {
+    const off = () => Math.max(header.offsetHeight + 28, Math.round((window.innerHeight - walk.offsetHeight) / 2));
+    const pin = ScrollTrigger.create({
+      trigger: walk, pin: true, refreshPriority: 1, invalidateOnRefresh: true,
+      start: () => 'top ' + off() + 'px',
+      end: () => '+=' + window.innerHeight * 2.5,
+    });
+    // La escritura arranca con el primer scroll y termina cuando se suelta el pin.
+    ScrollTrigger.create({
+      animation: tl, trigger: walk, scrub: 0.5, invalidateOnRefresh: true,
+      start: 'top 62%', end: () => pin.end,
+    });
+  };
+
+  // ---- Escritorio: mockup completo ----
   if (walk && mock) {
-    mm.add('(min-width: 0px)', () => {
-      const blank = ' ';
-      const saved = [];
+    mm.add('(min-width: 760px)', () => {
       const typed = [...mock.querySelectorAll('.fld:not(.ro):not(.dim)')];
       const pTotal = mock.querySelector('[data-walk-err]');
       const totalUsd = mock.querySelector('[data-walk-calc]');
-      const go = mock.querySelector('.go');
       const toastErr = mock.querySelector('.mock-toast.err');
-      const bot = mock.querySelector('.mock-bot');
-      const botLabel = mock.querySelector('.bot-label');
-      const botN = mock.querySelector('.bot-n');
-      const botCheck = mock.querySelector('.bot-check');
-      const eyesRun = mock.querySelector('.eyes-run');
-      const eyesHappy = mock.querySelector('.eyes-happy');
-      const panel = mock.querySelector('.mock-panel');
-      const labelW = botLabel ? Math.min(botLabel.scrollWidth, window.innerWidth < 600 ? 112 : 400) : 0;
-      const stDraft = mock.querySelector('.st-draft');
-      const stOk = mock.querySelector('.st-ok');
-      const stepEls = $$('[data-walk-step]');
-      const fillBar = $('[data-walk-fill]');
-      [...typed, totalUsd].filter(Boolean).forEach((el) => saved.push([el, el.textContent]));
-
+      const saved = [...typed, totalUsd].filter(Boolean).map((el) => [el, el.textContent]);
       const tl = gsap.timeline({ defaults: { ease: 'none' } });
-      // Escribe `full` letra por letra. `initial` es lo que se ve antes de empezar.
-      const type = (el, full, at, dur, initial, setInitial) => {
-        if (!el) return;
-        if (setInitial) el.textContent = initial;
-        const o = { n: 0 };
-        tl.to(o, {
-          n: full.length, duration: dur,
-          onUpdate: () => {
-            const k = Math.round(o.n);
-            el.textContent = k <= 0 ? initial : full.slice(0, k);
-            el.classList.toggle('is-typing', k > 0 && k < full.length);
-          },
-        }, at);
-      };
-
-      // Móvil: el mockup es una ventana más baja que su contenido; el contenido baja solo hasta el campo que se valida
-      const mainEl = mock.querySelector('.mock-main');
-      const bodyEl = mock.querySelector('.mock-body');
-      let dy = 0;
-      if (matchMedia('(max-width: 759px)').matches && mainEl && bodyEl && pTotal) {
-        dy = pTotal.offsetTop - bodyEl.offsetTop - 78; // deja visible la etiqueta del campo
-        // .mock-main se estira hasta la altura de la ventana: el alto real del contenido es scrollHeight
-        dy = Math.max(0, Math.min(dy, mainEl.scrollHeight - bodyEl.clientHeight));
-      }
 
       // 1. Captura
-      typed.forEach((el, i) => type(el, el.textContent.trim(), i * 0.16, 0.22, blank, true));
+      typed.forEach((el, i) => typeInto(tl, el, el.textContent.trim(), i * 0.16, 0.22, BLANK, true));
       // 2. Valida: error, corrección y cálculo automático
       if (pTotal) tl.fromTo(pTotal, { '--err': 0 }, { '--err': 1, duration: 0.25 }, 2.7);
       if (toastErr) tl.fromTo(toastErr, { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 2.75);
       if (pTotal) tl.to(pTotal, { '--err': 0, duration: 0.2 }, 3.6);
-      type(pTotal, '1,250.00', 3.65, 0.4, '0', false);
+      typeInto(tl, pTotal, '1,250.00', 3.65, 0.4, '0', false);
       if (toastErr) tl.to(toastErr, { opacity: 0, y: -14, duration: 0.25, ease: 'power2.in' }, 3.85);
-      type(totalUsd, '1,250.00', 4.1, 0.3, '0', true);
-      // Móvil: sube de nuevo al encabezado (estatus y botón) antes del clic
-      if (dy > 0) {
-        tl.fromTo(mainEl, { y: 0 }, { y: -dy, duration: 1.4, ease: 'power1.inOut' }, 1.0);
-        tl.to(mainEl, { y: 0, duration: 0.35, ease: 'power2.inOut' }, 4.1);
-      }
-      // 3. Listo: clic en Generar archivo M. El pedimento solo queda "Validado" cuando el bot termina.
-      if (go) {
-        tl.fromTo(go, { '--glow': 0 }, { '--glow': 1, duration: 0.25 }, 4.5);
-        tl.to(go, { scale: 0.93, duration: 0.08 }, 4.8).to(go, { scale: 1, duration: 0.12 }, 4.88);
-      }
-      if (bot) {
-        // En proceso: etiqueta + contador + ojos redondos que miran de lado a lado
-        tl.fromTo(bot, { opacity: 0, scale: 0.7, transformOrigin: '100% 50%' }, { opacity: 1, scale: 1, duration: 0.25, ease: 'back.out(1.7)' }, 4.95);
-        if (eyesRun) tl.fromTo(eyesRun, { x: -1.2 }, { x: 1.2, duration: 0.3, repeat: 1, yoyo: true, ease: 'sine.inOut' }, 5.15);
-        // Terminado: la etiqueta se pliega, aparece la palomita y los ojos sonríen
-        if (botLabel) tl.fromTo(botLabel, { maxWidth: labelW, opacity: 1 }, { maxWidth: 0, opacity: 0, duration: 0.25 }, 5.65);
-        if (botN) tl.fromTo(botN, { maxWidth: 14, opacity: 1 }, { maxWidth: 0, opacity: 0, duration: 0.25 }, 5.65);
-        if (botCheck) tl.fromTo(botCheck, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.25 }, 5.65);
-        if (eyesRun) tl.fromTo(eyesRun, { opacity: 1 }, { opacity: 0, duration: 0.2 }, 5.65);
-        if (eyesHappy) tl.fromTo(eyesHappy, { opacity: 0 }, { opacity: 1, duration: 0.2 }, 5.65);
-      }
-      // El estatus cambia a Validado en cuanto el bot termina
-      if (stDraft) tl.fromTo(stDraft, { opacity: 1 }, { opacity: 0, duration: 0.25 }, 5.7);
-      if (stOk) tl.fromTo(stOk, { opacity: 0 }, { opacity: 1, duration: 0.25 }, 5.7);
-      if (panel) tl.fromTo(panel, { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }, 5.95);
-      // Pasos del pie: el activo se enciende
-      const marks = [0, 2.6, 4.5];
-      stepEls.forEach((el, i) => {
-        if (i > 0) tl.fromTo(el, { opacity: 0.5 }, { opacity: 1, duration: 0.3 }, marks[i]);
-        if (i < stepEls.length - 1) tl.to(el, { opacity: 0.5, duration: 0.3 }, marks[i + 1]);
-      });
-      if (fillBar) tl.fromTo(fillBar, { scaleX: 0 }, { scaleX: 1, duration: 6.4 }, 0);
-      tl.set({}, {}, 6.4);
-
-      const off = () => Math.max(header.offsetHeight + 28, Math.round((window.innerHeight - walk.offsetHeight) / 2));
-      const pin = ScrollTrigger.create({
-        trigger: walk, pin: true, refreshPriority: 1, invalidateOnRefresh: true,
-        start: () => 'top ' + off() + 'px',
-        end: () => '+=' + window.innerHeight * 2.5,
-      });
-      // La escritura arranca con el primer scroll y termina cuando se suelta el pin.
-      ScrollTrigger.create({
-        animation: tl, trigger: walk, scrub: 0.5, invalidateOnRefresh: true,
-        start: 'top 62%', end: () => pin.end,
-      });
+      typeInto(tl, totalUsd, '1,250.00', 4.1, 0.3, '0', true);
+      // 3. Listo
+      finale(mock, tl, 4.5);
+      stepsAndFill(tl, [0, 2.6, 4.5], 6.4);
+      bindWalk(tl);
 
       return () => saved.forEach(([el, t]) => { el.textContent = t; el.classList.remove('is-typing'); });
+    });
+  }
+
+  // ---- Móvil: pantalla de teléfono con una escena por paso ----
+  if (walk && mockM) {
+    mm.add('(max-width: 759px)', () => {
+      const q = (s) => mockM.querySelector(s);
+      const fields = [...mockM.querySelectorAll('[data-mm-type]')];
+      const pField = q('[data-mm-p]');
+      const pVal = q('[data-mm-p] .mm-val');
+      const usd = q('[data-mm-usd]');
+      const [s1, s2, s3] = [1, 2, 3].map((n) => q('[data-mm-scene="' + n + '"]'));
+      const toastErr = q('.mock-toast.err');
+      const saved = [...fields, pVal, usd].filter(Boolean).map((el) => [el, el.textContent]);
+      const tl = gsap.timeline({ defaults: { ease: 'none' } });
+
+      // Escena 1 · Captura: los campos se escriben uno a uno
+      fields.forEach((el, i) => typeInto(tl, el, el.textContent.trim(), i * 0.36, 0.34, BLANK, true));
+      tl.fromTo(s1, { opacity: 1, y: 0 }, { opacity: 0, y: -16, duration: 0.3, ease: 'power2.in' }, 2.25);
+      // Escena 2 · Valida: el campo falla, llega la alerta desde arriba, se corrige y se calcula el total
+      tl.fromTo(s2, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 2.5);
+      typeInto(tl, pVal, '0', 2.65, 0.15, BLANK, true);
+      if (pField) tl.fromTo(pField, { '--err': 0 }, { '--err': 1, duration: 0.25 }, 3.0);
+      if (toastErr) tl.fromTo(toastErr, { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 3.05);
+      if (pField) tl.to(pField, { '--err': 0, duration: 0.2 }, 3.9);
+      if (toastErr) tl.to(toastErr, { opacity: 0, y: -14, duration: 0.25, ease: 'power2.in' }, 3.95);
+      typeInto(tl, pVal, '1,250.00', 3.95, 0.4, '0', false);
+      typeInto(tl, usd, '1,250.00', 4.3, 0.25, '0', true);
+      tl.to(s2, { opacity: 0, y: -16, duration: 0.3, ease: 'power2.in' }, 4.45);
+      // Escena 3 · Listo: botón, bot de procesos (isla), "Validado" y panel
+      tl.fromTo(s3, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 4.6);
+      finale(mockM, tl, 4.9);
+      stepsAndFill(tl, [0, 2.5, 4.6], 6.8, true);
+      bindWalk(tl);
+
+      return () => {
+        saved.forEach(([el, t]) => { el.textContent = t; el.classList.remove('is-typing'); });
+        const list = $('[data-walk-steps]');
+        if (list) list.classList.remove('is-stage');
+      };
     });
   }
 

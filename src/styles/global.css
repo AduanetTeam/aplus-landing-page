@@ -164,10 +164,10 @@ h2.sec { margin: 8px 0 0; font-weight: 400; font-size: clamp(32px, 4.6vw, 52px);
 .mock-toast.err { opacity: 0; } .mock-toast.err i { background: #dc2626; }
 .mock-toast span { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; }
 /* Bot de procesos en segundo plano: píldora oscura con ojos. Por defecto: terminado. */
-.mock-bot { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 3px 4px 3px 9px; border-radius: 999px; background: #161e2e; border: 1px solid rgba(255, 255, 255, .12); color: #fff; font-weight: 600; font-size: 11px; line-height: 1; }
+.mock-bot { display: inline-flex; align-items: center; gap: 0; height: 24px; padding: 3px 4px 3px 9px; border-radius: 999px; background: #161e2e; border: 1px solid rgba(255, 255, 255, .12); color: #fff; font-weight: 600; font-size: 11px; line-height: 1; }
 .mock-bot .bot-n { font-style: normal; font-size: 9.5px; opacity: 0; max-width: 0; overflow: hidden; color: rgba(255, 255, 255, .7); }
 .mock-bot .bot-label { max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap; }
-.mock-bot .bot-check { flex: none; fill: none; stroke: #fff; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.mock-bot .bot-check { flex: none; margin-right: 6px; fill: none; stroke: #fff; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 .bot-face { position: relative; flex: none; width: 18px; height: 18px; border-radius: 50%; background: #fff; }
 .bot-face .eyes { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 3.5px; }
 .bot-face .eyes i { display: block; background: #111827; }
@@ -182,28 +182,50 @@ h2.sec { margin: 8px 0 0; font-weight: 400; font-size: clamp(32px, 4.6vw, 52px);
 .mp-item b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11.5px; font-weight: 600; color: var(--ink); }
 .mp-item span { display: block; margin-top: 2px; font-size: 10.5px; color: var(--muted); }
 .mock-bot .bot-label { text-overflow: ellipsis; }
-/* Móvil: el mockup se recorta a una ventana con difuminado abajo; su contenido se desplaza solo (ver main.js) */
-@media (max-width: 759px) {
-  .mock-actions { display: flex; margin-top: 2px; }
-  .mock-actions span:not(.go) { display: none; }
-  .mock-body { -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 44px), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - 44px), transparent); }
-}
-/* Móvil angosto: la barra superior debe caber completa (el bot y su etiqueta no se recortan) */
-@media (max-width: 599px) {
-  .mock-top { padding: 9px 12px; gap: 8px; }
-  .mock-top > span { gap: 10px; }
-  .mock-sq, .mock-top > span:first-child > span:nth-child(3) { display: none; }
-  .mock-user { font-size: 0; padding: 3px; }
-  .mock-user .mock-av { font-size: 10px; }
-  .mock-bot { min-width: 0; }
-}
+/* Versión móvil del recorrido: pantalla pensada para el teléfono, no el mockup de escritorio reducido */
+.mm { display: none; position: relative; overflow: hidden; max-width: 520px; margin: 0 auto; background: var(--surface); border: 1px solid var(--line); border-radius: 26px; box-shadow: var(--shadow); text-align: left; font-size: 14px; }
+@media (max-width: 759px) { .mm { display: block; } .mock { display: none; } }
+.mm-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 46px; padding: 12px 16px 0; }
+.mm-brand { flex: 1; font-size: 15px; font-weight: 600; letter-spacing: .02em; color: var(--ink); }
+.mm-user { flex: 1; display: flex; justify-content: flex-end; }
+.mm-user .mock-av { width: 24px; height: 24px; border-radius: 8px; font-size: 11px; }
+.mm-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 18px 14px; border-bottom: 1px solid var(--line); }
+.mm-title { font-size: 19px; font-weight: 600; letter-spacing: -.02em; color: var(--ink); }
+.mm-sub { margin-top: 2px; font-size: 12px; color: var(--muted); }
+.mm .mock-status { margin: 0; font-size: 11.5px; }
+.mm-scenes { display: grid; min-height: 252px; padding: 16px 18px 20px; }
+.mm-scene { grid-area: 1 / 1; display: grid; gap: 12px; align-content: start; }
+.mm-scene[data-mm-scene="1"], .mm-scene[data-mm-scene="2"] { opacity: 0; }
+.mm-scene[data-mm-scene="3"] { align-content: center; }
+.mm-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.mm-lbl { display: block; margin-bottom: 5px; font-size: 12px; color: var(--muted); }
+.mm-val { min-height: 46px; padding: 12px 13px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink); font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mm-val.big { min-height: 54px; font-size: 20px; font-weight: 500; }
+.mm-val.ro { background: var(--surface2); }
+.mm-val.is-typing { border-color: var(--violet); box-shadow: 0 0 0 3px var(--chip); }
+.mm-val.is-typing::after { content: ''; display: inline-block; width: 1px; height: 1.05em; margin-left: 1px; vertical-align: text-bottom; background: var(--violet); animation: caret 1s steps(1) infinite; }
+[data-mm-p] .mm-val { outline: calc(var(--err, 0) * 2px) solid #dc2626; outline-offset: -1px; box-shadow: 0 0 0 calc(var(--err, 0) * 3px) rgba(220, 38, 38, .16); }
+.mm-checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 11px; }
+.mm-checks li { display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--ink); }
+.mm-checks i { flex: none; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; background: #16a34a; color: #fff; font-style: normal; font-size: 11px; font-weight: 700; }
+.mm-go { display: flex; align-items: center; justify-content: center; height: 54px; margin-top: 6px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--ink); font-size: 16px; font-weight: 600; box-shadow: 0 0 0 calc(var(--glow, 0) * 5px) var(--chip), 0 0 0 calc(var(--glow, 0) * 1.5px) var(--violet); }
+.mm .mock-panel { top: 66px; left: 12px; right: 12px; width: auto; }
 .walk-steps { list-style: none; margin: 18px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; text-align: left; }
 .walk-steps .n { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--violet); }
 .walk-steps b { display: block; margin-top: 2px; font-size: 15px; font-weight: 600; color: var(--ink); }
 .walk-steps .d { display: block; margin-top: 3px; font-size: 13px; line-height: 1.4; color: var(--muted); }
 .walk-bar { height: 2px; margin-top: 14px; border-radius: 2px; background: var(--line); overflow: hidden; }
 .walk-bar i { display: block; height: 100%; background: var(--violet); transform-origin: 0 50%; }
-@media (max-width: 599px) { .walk-steps { gap: 8px; } .walk-steps .d { display: none; } }
+/* Móvil: un solo paso a la vez, con texto grande (JS añade .is-stage para apilarlos en la misma celda) */
+@media (max-width: 759px) {
+  .walk-steps { grid-template-columns: 1fr; gap: 16px; margin-top: 22px; }
+  .walk-steps.is-stage li { grid-area: 1 / 1; }
+  .walk-steps .n { font-size: 12px; letter-spacing: .04em; }
+  .walk-steps .n::after { content: ' / 03'; opacity: .55; }
+  .walk-steps b { margin-top: 4px; font-size: 24px; line-height: 1.15; letter-spacing: -.02em; }
+  .walk-steps .d { margin-top: 6px; font-size: 16px; line-height: 1.5; }
+  .walk-bar { height: 4px; margin-top: 18px; }
+}
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
 /* Flujo */
@@ -366,7 +388,7 @@ h2.sec { margin: 8px 0 0; font-weight: 400; font-size: clamp(32px, 4.6vw, 52px);
 /* Reveal */
 /* Ocultos hasta que GSAP reproduce la entrada (la clase .js la pone el layout) */
 @media (prefers-reduced-motion: no-preference) {
-  .js [data-hero-text], .js [data-hero-mock] { opacity: 0; }
+  .js [data-hero-text], .js [data-hero-mock], .js [data-walk-m] { opacity: 0; }
   .js:not(.nav-in) .header .logo, .js:not(.nav-in) .nav-links a, .js:not(.nav-in) .nav-actions > * { opacity: 0; }
 }
 

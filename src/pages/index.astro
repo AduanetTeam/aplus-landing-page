@@ -127,6 +127,53 @@ import Layout from "../layouts/Layout.astro";
         <div class="mock-toast err"><i>!</i><div><b>Falta un dato obligatorio</b><span>P. total (ME) no puede ser 0.</span></div></div>
       </div>
     </div>
+    <!-- Versión móvil del recorrido: pantalla pensada para el teléfono (el mockup de escritorio se oculta en móvil) -->
+    <div class="mm" data-walk-m role="img" aria-label="Pantalla móvil de SIMA: se capturan los datos, se corrige un campo obligatorio y se genera el archivo M con el aviso de proceso en segundo plano">
+      <div class="mm-bar" aria-hidden="true"><span class="mm-brand">SIMA</span><span class="mock-bot" aria-hidden="true"><i class="bot-n">1</i><span class="bot-label">Generación de archivo M…</span><svg class="bot-check" width="12" height="12" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="bot-face"><span class="eyes eyes-run"><i></i><i></i></span><span class="eyes eyes-happy"><i></i><i></i></span></span></span><span class="mm-user"><span class="mock-av">U</span></span></div>
+      <div class="mm-head" aria-hidden="true">
+        <div><div class="mm-title">Pedimento 6000002</div><div class="mm-sub">Importación · Clave A1</div></div>
+        <span class="mock-status"><span class="st-draft">Borrador</span><span class="st-ok">Validado</span></span>
+      </div>
+      <div class="mm-scenes" aria-hidden="true">
+        <div class="mm-scene" data-mm-scene="1">
+          <div class="mm-row">
+            <div><span class="mm-lbl">Cliente</span><div class="mm-val" data-mm-type>ADN001 - Aduanet</div></div>
+            <div><span class="mm-lbl">Referencia *</span><div class="mm-val" data-mm-type>T000001</div></div>
+          </div>
+          <div class="mm-row">
+            <div><span class="mm-lbl">Pedimento *</span><div class="mm-val" data-mm-type>6000002</div></div>
+            <div><span class="mm-lbl">Tipo operación *</span><div class="mm-val" data-mm-type>Importación</div></div>
+          </div>
+          <div class="mm-row">
+            <div><span class="mm-lbl">Clave documento *</span><div class="mm-val" data-mm-type>A1 - IMPORTACIÓN</div></div>
+            <div><span class="mm-lbl">Tipo régimen *</span><div class="mm-val" data-mm-type>IMD - DEFINITIVO</div></div>
+          </div>
+        </div>
+        <div class="mm-scene" data-mm-scene="2">
+          <div data-mm-p><span class="mm-lbl">P. total (ME) *</span><div class="mm-val big">0</div></div>
+          <div class="mm-row">
+            <div><span class="mm-lbl">Factor ME</span><div class="mm-val">1</div></div>
+            <div><span class="mm-lbl">T. cambio</span><div class="mm-val">19.3668</div></div>
+          </div>
+          <div><span class="mm-lbl">Total USD</span><div class="mm-val ro" data-mm-usd>1,250.00</div></div>
+        </div>
+        <div class="mm-scene" data-mm-scene="3">
+          <ul class="mm-checks">
+            <li><i>✓</i>Datos generales completos</li>
+            <li><i>✓</i>Valores corregidos</li>
+            <li><i>✓</i>Sin alertas pendientes</li>
+          </ul>
+          <div class="mm-go">Generar archivo M</div>
+        </div>
+      </div>
+      <div class="mock-panel" aria-hidden="true">
+        <div class="mp-head"><span>Procesos en segundo plano</span><b>Limpiar</b></div>
+        <div class="mp-item"><i>✓</i><div><b>Generación de archivo M · Pedimento 6000002</b><span>Terminado · clic para ver</span></div></div>
+      </div>
+      <div class="mock-toasts" aria-hidden="true">
+        <div class="mock-toast err"><i>!</i><div><b>Falta un dato obligatorio</b><span>P. total (ME) no puede ser 0.</span></div></div>
+      </div>
+    </div>
     <ol class="walk-steps" data-walk-steps>
       <li data-walk-step><span class="n">01</span><b>Captura</b><span class="d">Datos reutilizables: capturas solo lo necesario.</span></li>
       <li data-walk-step><span class="n">02</span><b>Valida</b><span class="d">Las alertas avisan lo que falta mientras capturas.</span></li>
